@@ -20,16 +20,16 @@ Finds LinkedIn users discussing DataStax / Cassandra ecosystem technologies, val
 ```bash
 pip install -r requirements.txt
 cp .env.example .env        # add your API keys (see table below)
-python main.py              # dry-run — no keys needed, uses mock data
-python/python3 main.py --live       # full live run: Apify + LLM validation + outreach
-python/python3 main.py --reset      # wipe DB, then run
+python3 main.py              # dry-run: mock posts — LLM pipeline runs if OPENAI_API_KEY is set
+python3 main.py --live       # full live run: Apify fetch + LLM validation + outreach (both keys required)
+python3 main.py --reset      # wipe DB, then run
 ```
 
 ---
 
 ## Environment variables
 
-Copy `.env.example` to `.env` and fill in both values. Neither is needed for a dry-run.
+Copy `.env.example` to `.env` and fill in both values. `APIFY_API_TOKEN` is only required for `--live`; `OPENAI_API_KEY` is optional for dry-run (enables LLM validation and outreach on mock data).
 
 | Variable | Where to get it | Used for |
 |---|---|---|
@@ -104,13 +104,14 @@ Copy `.env.example` to `.env` and fill in both values. Neither is needed for a d
    - Hard-reject if `post_text` contains none of `TECH_KEYWORDS`
    - Survivors → **warm** (move to Stage 2)
 
-3. **Stage 2 — LLM validation** (`--live` only, one `OPENAI_MODEL` call per warm candidate):
+3. **Stage 2 — LLM validation** (runs whenever `OPENAI_API_KEY` is set, one `OPENAI_MODEL` call per warm candidate):
    - `llm.validate_lead()` returns `{relevant: bool, reason: str}`
    - Non-relevant leads → **rejected** with reason stored in `report.md`, never in DB
+   - Skipped gracefully if `OPENAI_API_KEY` is not set
 
 4. **Persist** — Warm leads saved to `leads.db → leads`. Rejected leads are never written to the database.
 
-5. **Outreach** — One `OPENAI_MODEL` call per warm lead → LinkedIn invite (≤280 chars) + follow-up email. Saved to `leads.db → messages` and appended to `outreach_log.md`.
+5. **Outreach** — One `OPENAI_MODEL` call per warm lead → LinkedIn invite (≤280 chars) + follow-up email. Saved to `leads.db → messages` and appended to `outreach_log.md`. Runs on both mock and live data whenever `OPENAI_API_KEY` is set.
 
 6. **Report** — `report.md` written from the current run's data (never from the DB).
 

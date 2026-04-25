@@ -3,8 +3,8 @@
 LinkedIn Lead Hunter — ScyllaDB GTM take-home PoC
 
 Usage:
-  python main.py            # dry-run: mock posts, no API calls
-  python main.py --live     # Apify fetch + LLM validate + OpenAI outreach
+  python main.py            # dry-run: mock posts + LLM pipeline if OPENAI_API_KEY is set
+  python main.py --live     # Apify fetch + LLM validate + OpenAI outreach (both keys required)
   python main.py --reset    # wipe DB before run
 """
 
@@ -47,10 +47,12 @@ def main() -> None:
     rejected1  = [l for l in scored if l["bucket"] == "rejected"]
     print(f"  [stage1] {len(candidates)} candidates  |  {len(rejected1)} rejected by rules")
 
-    # ── 3. STAGE 2: LLM relevance validation (live only) ──────────────────────
-    if args.live and candidates:
-        if not os.getenv(config.OPENAI_TOKEN_ENV):
-            sys.exit(f"ERROR: {config.OPENAI_TOKEN_ENV} not set in .env")
+    # ── 3. STAGE 2: LLM relevance validation ─────────────────────────────────
+    has_openai = bool(os.getenv(config.OPENAI_TOKEN_ENV))
+    if args.live and not has_openai:
+        sys.exit(f"ERROR: {config.OPENAI_TOKEN_ENV} not set in .env")
+
+    if candidates and has_openai:
         print(f"  [stage2] LLM validating {len(candidates)} candidates...")
         for lead in candidates:
             result = llm.validate_lead(lead)
@@ -60,8 +62,8 @@ def main() -> None:
                 print(f"           ✗ {lead['name']} — {result['reason']}")
             else:
                 print(f"           ✓ {lead['name']}")
-    elif not args.live:
-        print(f"  [stage2] Dry-run — skipping LLM validation")
+    elif not has_openai:
+        print(f"  [stage2] Skipping LLM validation — {config.OPENAI_TOKEN_ENV} not set")
 
     # ── 4. PERSIST — only confirmed warm leads ─────────────────────────────────
     actionable = [l for l in scored if l["bucket"] == "warm"]
@@ -71,7 +73,8 @@ def main() -> None:
         lead_ids[lead["profile_url"]] = lid
 
     # ── 5. GENERATE OUTREACH ──────────────────────────────────────────────────
-    if args.live and actionable:
+    if actionable and has_openai:
+        mode = "live" if args.live else "dry-run"
         print(f"  [outreach] Generating messages for {len(actionable)} leads...")
         for lead in actionable:
             try:
@@ -83,10 +86,10 @@ def main() -> None:
             except Exception as exc:
                 print(f"             ✗ {lead['name']}: {exc}")
 
-        log_path = outreach_log.append_run(actionable, mode="live")
+        log_path = outreach_log.append_run(actionable, mode=mode)
         print(f"  [log] Outreach appended → {log_path.resolve()}")
-    elif not args.live:
-        print(f"  [outreach] Dry-run — skipping outreach generation ({len(actionable)} actionable leads)")
+    elif not has_openai:
+        print(f"  [outreach] Skipping outreach generation — {config.OPENAI_TOKEN_ENV} not set ({len(actionable)} actionable leads)")
 
     # ── 6. REPORT — always from current run ───────────────────────────────────
     html_path = reporter.render_report(scored)
