@@ -1,0 +1,72 @@
+[
+  {
+    "author_name": "Sarah Chen",
+    "author_headline": "Staff Data Engineer at Stripe",
+    "author_profile_url": "https://www.linkedin.com/in/sarah-chen-data-eng",
+    "post_text": "Just shipped our RAG pipeline using LangFlow and AstraDB as the vector store backend. The LangFlow visual builder connects to Astra's serverless API in about 10 lines of config which is genuinely fast to prototype with. Running at ~100K daily queries now and latency is holding up. One rough edge: debugging complex flows in LangFlow when you need to trace exactly where embedding retrieval goes wrong is still painful. Anyone else running LangFlow in prod?",
+    "posted_at": "2024-01-15T10:23:00Z"
+  },
+  {
+    "author_name": "Marcus Rivera",
+    "author_headline": "Principal Backend Engineer at Rappi",
+    "author_profile_url": "https://www.linkedin.com/in/marcusrivera-backend",
+    "post_text": "Anyone running Cassandra at scale on a DataStax-managed setup seen persistent read latency spikes during maintenance windows? We jump from 4ms to 40ms p99 for hours after each scheduled event. Ticket's been open 6 days with no root cause analysis. At 40K reads/sec the lack of visibility into what's happening at the storage layer is the real problem — starting to wonder if self-managed gives you better debuggability.",
+    "posted_at": "2024-01-18T14:45:00Z"
+  },
+  {
+    "author_name": "Elena Sokolova",
+    "author_headline": "Lead Database Administrator at N26",
+    "author_profile_url": "https://www.linkedin.com/in/elena-sokolova-dba",
+    "post_text": "Six months since we wrapped our DB consolidation project. Moved three internal services off DataStax licensing onto a self-managed setup. The SSTable compatibility made the migration far less painful than I expected — most of the work was around operational tooling rather than data format. Licensing cost is down significantly. Write-up coming soon.",
+    "posted_at": "2024-01-20T09:12:00Z"
+  },
+  {
+    "author_name": "James Whitfield",
+    "author_headline": "Solutions Architect at Shopify",
+    "author_profile_url": "https://www.linkedin.com/in/jwhitfield-architect",
+    "post_text": "Evaluated wide-column vs columnar storage for our IoT telemetry platform last quarter. Landed on Cassandra because of write throughput requirements and native TTL support. 18 months in: write performance holds up, but the data modeling discipline required is genuinely steep. If your team doesn't have someone who thinks in partition keys, budget for the ramp-up time.",
+    "posted_at": "2024-01-22T16:30:00Z"
+  },
+  {
+    "author_name": "Priya Nair",
+    "author_headline": "Senior Platform Engineer at Gojek",
+    "author_profile_url": "https://www.linkedin.com/in/priya-nair-sre",
+    "post_text": "Exploring Astra Streaming vs self-managed Apache Pulsar for our cross-region event bus. Operationally Astra Streaming wins — no brokers to babysit, geo-replication just works. The tradeoff is egress pricing at our throughput tier gets uncomfortable fast. Curious what others at similar scale are doing. Is the ops simplicity worth the cost at 500GB+/day?",
+    "posted_at": "2024-01-25T11:00:00Z"
+  },
+  {
+    "author_name": "Tom Bradley",
+    "author_headline": "VP of Platform Engineering at Fender",
+    "author_profile_url": "https://www.linkedin.com/in/tombradley-platform",
+    "post_text": "Two years on DataStax Astra. For a four-person infra team that needed managed Cassandra with CQL compatibility and no ops overhead, it delivered. It is not cheap — I won't pretend otherwise. But when I calculated the fully-loaded cost of running our own cluster (infra + on-call + expertise), the gap narrowed more than I expected. Would I choose it again? Probably, at our current scale.",
+    "posted_at": "2024-01-27T17:45:00Z"
+  },
+  {
+    "author_name": "Kenji Nakamura",
+    "author_headline": "Senior Product Manager at DataStax",
+    "author_profile_url": "https://www.linkedin.com/in/kenji-nakamura-pm",
+    "post_text": "Excited to share that Astra DB now supports vector search natively. This unlocks a whole new set of AI-native use cases on Cassandra-compatible infrastructure. We've been working on this for the past two quarters and the early benchmark results are very strong. Full technical deep-dive on our engineering blog — link in comments.",
+    "posted_at": "2024-01-29T09:00:00Z"
+  },
+  {
+    "author_name": "Rachel Montgomery",
+    "author_headline": "Senior Data Architect at IBM",
+    "author_profile_url": "https://www.linkedin.com/in/rachel-montgomery-ibm",
+    "post_text": "Enterprise data modernization rarely follows a straight line. In my experience working with large financial clients, the DataStax and Cassandra footprints tend to grow organically and become surprisingly hard to rationalize. Sharing a framework we use to help clients think through consolidation decisions. Happy to connect with anyone working through a similar challenge.",
+    "posted_at": "2024-01-30T10:00:00Z"
+  },
+  {
+    "author_name": "Daniel Osei",
+    "author_headline": "Data Engineering Lead at Intercom",
+    "author_profile_url": "https://www.linkedin.com/in/danielosei-data",
+    "post_text": "Finally standardized our lakehouse on Delta Lake after 18 months of debate. ACID transactions and time travel solved real problems for us. Moved off Hive metastore entirely, Spark performance with Z-ordering is dramatically better. Next step is real-time ingestion via Delta Live Tables. The open table format ecosystem has matured a lot.",
+    "posted_at": "2024-02-01T15:30:00Z"
+  },
+  {
+    "author_name": "Jennifer Walsh",
+    "author_headline": "Technical Recruiter at Klarna",
+    "author_profile_url": "https://www.linkedin.com/in/jennifer-walsh-recruiter",
+    "post_text": "We're hiring a Senior Data Engineer to join our platform team! You'll be working on our real-time infrastructure including Cassandra clusters and event streaming pipelines. 5+ years of experience required, strong distributed systems background preferred. Fully remote within EU, competitive comp. Apply now via the link or DM me your CV. #hiring",
+    "posted_at": "2024-02-04T09:30:00Z"
+  }
+]

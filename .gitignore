@@ -1,0 +1,27 @@
+# Secrets
+.env
+
+# Generated outputs (lead data — keep out of git)
+leads.db
+report.md
+outreach_log.md
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp
