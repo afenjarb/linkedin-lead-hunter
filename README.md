@@ -21,8 +21,8 @@ Finds LinkedIn users discussing DataStax / Cassandra ecosystem technologies, val
 pip install -r requirements.txt
 cp .env.example .env        # add your API keys (see table below)
 python main.py              # dry-run — no keys needed, uses mock data
-python main.py --live       # full live run: Apify + LLM validation + outreach
-python main.py --reset      # wipe DB, then run
+python/python3 main.py --live       # full live run: Apify + LLM validation + outreach
+python/python3 main.py --reset      # wipe DB, then run
 ```
 
 ---
